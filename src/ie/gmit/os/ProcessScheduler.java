@@ -54,7 +54,7 @@ public class ProcessScheduler {
 				System.out.println("Something is wrong!");
 				break;
 			}
-			System.out.println("Please choose a process scheduling algorithm to run");
+			System.out.println("\nPlease choose a process scheduling algorithm to run");
 			System.out.println("Press 1: FCFS");
 			System.out.println("Press 2: SJF");
 			System.out.println("Press 3: Round Robin");
@@ -77,13 +77,17 @@ public class ProcessScheduler {
 		float average = 0;
 		
 		for (int i=0; i<pcNum; i++) {
+			System.out.println(pc.get(i).toString() + " wait time: " + serviceTime);
 			serviceTime += pc.get(i).getBurstTime();
 			totWaitTime += serviceTime;
 			
+			// get the total wait time
 			if (i == (pcNum - 1)) {
 				totWaitTime -= serviceTime;
 			}
 		}
+		
+		
 		
 		// get the total wait time and average
 		average = (float)totWaitTime/pcNum;
@@ -102,14 +106,22 @@ public class ProcessScheduler {
 		// clone the array list
 		ArrayList<Process> pcClone = (ArrayList<Process>) pc.clone();
 		
-		// sort the array list
-		Collections.sort(pcClone);
-		
+		System.out.println("Before sorting the list");
 		for(Process str: pcClone) {
 			System.out.println(str);
 		}
 		
+		// sort the array list
+		Collections.sort(pcClone);
+		
+		System.out.println("After sorting the list");
+		for(Process str: pcClone) {
+			System.out.println(str);
+		}
+		
+		System.out.println();
 		for (int i=0; i<pcNum; i++) {
+			System.out.println(pcClone.get(i).toString() + " wait time: " + serviceTime);
 			serviceTime += pcClone.get(i).getBurstTime();
 			totWaitTime += serviceTime;
 			
@@ -133,6 +145,7 @@ public class ProcessScheduler {
 		int totRemainTime;
 		float average = 0;
 		boolean done = false;
+		int tempCount = 0;
 		
 		// initialise the remain time
 		initrr(pc, pcNum);
@@ -141,6 +154,12 @@ public class ProcessScheduler {
 			// set default zero
 			totRemainTime = 0;
 			for (int i=0; i<pcNum; i++) {
+				if (tempCount == 0) {
+					System.out.println(pc.get(i).toString() + " wait time: " + serviceTime);
+				}
+				else if (tempCount != 0 && pc.get(i).getRemainTime() != 0) {
+					System.out.println(pc.get(i).toString() + " wait time: " + serviceTime);
+				}
 				if (pc.get(i).getRemainTime() > quanta) {
 					serviceTime += quanta;
 					pc.get(i).setRemainTime(pc.get(i).getRemainTime() - quanta);				
@@ -153,7 +172,7 @@ public class ProcessScheduler {
 					pc.get(i).setRemainTime(0);
 				}
 				totRemainTime += pc.get(i).getRemainTime();
-				System.out.println(pc.get(i).toString() + " wait time: " + serviceTime);
+				tempCount++;
 			}
 			
 			// check the iteration ends
